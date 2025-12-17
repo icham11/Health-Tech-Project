@@ -21,54 +21,84 @@ class CheckupController {
 
   static async postCheckup(req, res) {
     try {
-      const { symptoms } = req.body;
+      let { symptoms } = req.body;
       const userId = req.session.userId;
+
+      if (!Array.isArray(symptoms)) {
+        symptoms = [symptoms];
+      }
+
+      // Safety: Filter out non-numeric values and cast to integers
+      symptoms = symptoms.map((s) => parseInt(s)).filter((s) => !isNaN(s));
 
       if (!symptoms || symptoms.length === 0) {
         return res.redirect("/check-up");
       }
 
       const doctors = await Doctor.findAll({
-        include: {
-          model: Disease,
-          where: {
-            id: {
-              [Op.in]: symptoms,
+        include: [
+          {
+            model: Disease,
+            where: {
+              id: {
+                [Op.in]: symptoms,
+              },
             },
           },
-        },
+          {
+            model: User,
+          },
+        ],
       });
 
       if (doctors.length === 0) {
         return res.send("No doctors found for the selected symptoms");
       }
 
-      let bestMatch = {
-        doctor: null,
-        matchCount: 0,
-      };
+      const user = await User.findByPk(userId);
 
-      for (const doctor of doctors) {
-        const matchCount = doctor.Diseases.length;
-        if (matchCount > bestMatch.matchCount) {
-          bestMatch = {
-            doctor,
-            matchCount,
-          };
-        }
+      // Render the doctor selection page instad of auto-booking
+      res.render("check-up-doctors", { doctors, symptoms, user });
+    } catch (error) {
+      console.log(error);
+      res.send(error);
+    }
+  }
+
+  static async bookAppointment(req, res) {
+    try {
+      const { doctorId, symptoms } = req.body;
+      const { userId } = req.session;
+
+      // Parse symptoms back to array of integers
+      const symptomsArray = symptoms.split(",").map(Number);
+
+      // Find the doctor and intersect symptoms to find the reason
+      const doctor = await Doctor.findByPk(doctorId, {
+        include: {
+          model: Disease,
+          where: {
+            id: {
+              [Op.in]: symptomsArray,
+            },
+          },
+        },
+      });
+
+      if (!doctor || doctor.Diseases.length === 0) {
+        return res.redirect("/check-up");
       }
 
-      const diseaseId = await Disease.findOne({
-        where: { id: symptoms[0] },
-      });
+      // Pick the first matching disease as the reason
+      const diseaseId = doctor.Diseases[0].id;
 
       const appointmentDate = new Date();
       appointmentDate.setDate(appointmentDate.getDate() + 3);
 
       await Appointment.create({
         userId,
-        doctorId: bestMatch.doctor.id,
-        diseaseId: diseaseId.id,
+        doctorId: doctor.id,
+        diseaseId,
         appointmentDate,
         status: "pending",
       });

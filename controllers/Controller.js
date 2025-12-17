@@ -23,16 +23,32 @@ class Controller {
           },
         });
 
-        appointments = await Appointment.findAll({
-          where: { userId },
-          include: [
-            {
-              model: Doctor,
-              include: User,
-            },
-            Disease,
-          ],
-        });
+        if (user.role === "doctor") {
+          const doctor = await Doctor.findOne({ where: { userId } });
+          if (doctor) {
+            appointments = await Appointment.findAll({
+              where: { doctorId: doctor.id },
+              include: [
+                {
+                  model: User,
+                  include: UserProfile,
+                },
+                Disease,
+              ],
+            });
+          }
+        } else {
+          appointments = await Appointment.findAll({
+            where: { userId },
+            include: [
+              {
+                model: Doctor,
+                include: User,
+              },
+              Disease,
+            ],
+          });
+        }
       }
 
       res.render("home", { user, appointments });
@@ -85,6 +101,7 @@ class Controller {
         lastName,
         dateOfBirth,
         gender,
+        specialization,
       } = req.body;
       const user = await User.create({ username, email, password, role });
       await UserProfile.create({
@@ -94,6 +111,14 @@ class Controller {
         gender,
         userId: user.id,
       });
+
+      if (role === "doctor") {
+        await Doctor.create({
+          userId: user.id,
+          specialization: specialization || "General",
+        });
+      }
+
       res.redirect("/login");
     } catch (error) {
       console.log(error);

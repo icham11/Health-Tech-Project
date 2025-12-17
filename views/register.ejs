@@ -22,6 +22,29 @@
       <option value="doctor">Doctor</option>
     </select>
   </div>
+  <div id="specialization-container" style="display: none">
+    <label for="specialization">Specialization</label>
+    <select id="specialization" name="specialization">
+      <option value="General">General</option>
+      <option value="Surgeon">Surgeon</option>
+      <option value="Cardiologist">Cardiologist</option>
+      <option value="Pediatrician">Pediatrician</option>
+      <option value="Dermatologist">Dermatologist</option>
+      <option value="Neurologist">Neurologist</option>
+    </select>
+  </div>
+  <script>
+    const roleSelect = document.getElementById("role");
+    const specContainer = document.getElementById("specialization-container");
+
+    roleSelect.addEventListener("change", function () {
+      if (this.value === "doctor") {
+        specContainer.style.display = "block";
+      } else {
+        specContainer.style.display = "none";
+      }
+    });
+  </script>
   <div>
     <label for="firstName">First Name</label>
     <input type="text" id="firstName" name="firstName" />

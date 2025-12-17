@@ -17,13 +17,24 @@
         </button>
       </form>
     </div>
+    <% if (role === 'doctor') { %>
+    <div class="col-md-6 text-right">
+      <a href="/diseases/add" class="btn btn-primary">Add New Disease</a>
+    </div>
+    <% } %>
   </div>
+  <% if (typeof error !== 'undefined' && error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+  <% } %>
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
         <th>Name</th>
         <th>Description</th>
         <th>Level</th>
+        <% if (role === 'doctor') { %>
+        <th>Actions</th>
+        <% } %>
       </tr>
     </thead>
     <tbody>
@@ -32,6 +43,21 @@
         <td><%= disease.name %></td>
         <td><%= disease.description %></td>
         <td><%= disease.level %></td>
+        <% if (role === 'doctor') { %>
+        <td>
+          <a
+            href="/diseases/<%= disease.id %>/edit"
+            class="btn btn-sm btn-warning"
+            >Edit</a
+          >
+          <a
+            href="/diseases/<%= disease.id %>/delete"
+            class="btn btn-sm btn-danger"
+            onclick="return confirm('Are you sure?')"
+            >Delete</a
+          >
+        </td>
+        <% } %>
       </tr>
       <% }); %>
     </tbody>

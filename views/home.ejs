@@ -3,7 +3,48 @@
 <div class="container mt-5">
   <h1>Welcome, <%= user ? user.username : 'Guest' %>!</h1>
 
-  <% if (user) { %>
+  <% if (user) { %> <% if (user.role === 'doctor') { %>
+  <h2>Incoming Appointments</h2>
+  <% if (appointments.length > 0) { %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Gender</th>
+        <th>Disease</th>
+        <th>Appointment Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% appointments.forEach(appointment => { %>
+      <tr>
+        <td><%= appointment.User ? appointment.User.username : 'Unknown' %></td>
+        <td>
+          <%= appointment.User && appointment.User.UserProfile ?
+          appointment.User.UserProfile.gender : '-' %>
+        </td>
+        <td><%= appointment.Disease.name %></td>
+        <td><%= appointment.appointmentDate.toLocaleDateString() %></td>
+        <td><%= appointment.status %></td>
+        <td>
+          <% if (appointment.status === 'pending') { %>
+          <a
+            href="/appointments/<%= appointment.id %>/complete"
+            class="btn btn-sm btn-success"
+            onclick="return confirm('Mark as completed?')"
+            >Complete</a
+          >
+          <% } %>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p>No incoming appointments yet.</p>
+  <% } %> <% } else { %>
   <a href="/check-up" class="btn btn-primary mb-3">New Check Up</a>
 
   <h2>Your Appointments</h2>
@@ -20,17 +61,20 @@
     <tbody>
       <% appointments.forEach(appointment => { %>
       <tr>
-        <td><%= appointment.Doctor.User.username %></td>
+        <td>
+          Dr. <%= appointment.Doctor && appointment.Doctor.User ?
+          appointment.Doctor.User.username : 'Unknown' %>
+        </td>
         <td><%= appointment.Disease.name %></td>
-        <td><%= appointment.appointmentDate %></td>
+        <td><%= appointment.appointmentDate.toLocaleDateString() %></td>
         <td><%= appointment.status %></td>
       </tr>
       <% }); %>
     </tbody>
   </table>
   <% } else { %>
-  <p>You have no appointments.</p>
-  <% } %> <% } else { %>
+  <p>You have no appointments. Book a <a href="/check-up">Check-up</a> now!</p>
+  <% } %> <% } %> <% } else { %>
   <p>Please <a href="/login">login</a> to manage your appointments.</p>
   <% } %>
 </div>

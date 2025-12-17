@@ -1,0 +1,41 @@
+<%- include('./partials/header') %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">Recommended Doctors</h1>
+
+  <p>Based on your symptoms, here are the doctors who can treat you.</p>
+
+  <div class="row">
+    <% doctors.forEach(doctor => { %>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Dr. <%= doctor.User.username %></h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <%= doctor.specialization || 'General Practitioner' %>
+          </h6>
+          <p class="card-text">
+            <strong>Can treat:</strong>
+            <%= doctor.Diseases.map(d => d.name).join(', ') %>
+          </p>
+          <form action="/check-up/book" method="POST">
+            <input type="hidden" name="doctorId" value="<%= doctor.id %>" />
+            <input
+              type="hidden"
+              name="symptoms"
+              value="<%= symptoms.join(',') %>"
+            />
+            <button type="submit" class="btn btn-primary btn-block">
+              Book Appointment
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <a href="/check-up" class="btn btn-secondary mt-3">Back to Check Up</a>
+</div>
+
+<%- include('./partials/footer') %>

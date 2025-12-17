@@ -19,6 +19,7 @@
             <th>Reason (Disease)</th>
             <th>Date</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -34,11 +35,32 @@
             </td>
             <td>
               <span
-                class="badge badge-<%= appointment.status === 'pending' ? 'warning' : 'success' %>"
+                class="badge badge-<%= appointment.status === 'pending' ? 'warning' : (appointment.status === 'completed' ? 'success' : 'danger') %>"
               >
                 <%= appointment.status.charAt(0).toUpperCase() +
                 appointment.status.slice(1) %>
               </span>
+            </td>
+            <td>
+              <% if (appointment.status === 'pending') { %>
+              <a
+                href="/appointments/<%= appointment.id %>/cancel"
+                class="btn btn-sm btn-danger"
+                onclick="return confirm('Are you sure you want to cancel this appointment?')"
+                >Cancel</a
+              >
+              <a
+                href="/appointments/<%= appointment.id %>/invoice"
+                class="btn btn-sm btn-info"
+                >Invoice</a
+              >
+              <% } else if (appointment.status === 'completed') { %>
+              <a
+                href="/appointments/<%= appointment.id %>/invoice"
+                class="btn btn-sm btn-info"
+                >Invoice</a
+              >
+              <% } %>
             </td>
           </tr>
           <% }); %>

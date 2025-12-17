@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class UserProfile extends Model {
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Definisikan asosiasi one-to-one: Satu UserProfile hanya dimiliki oleh satu User.
-      UserProfile.belongsTo(models.User, { foreignKey: 'userId' });
+      UserProfile.belongsTo(models.User, { foreignKey: "userId" });
     }
 
     // Menambahkan instance method/getter untuk mendapatkan nama lengkap
@@ -18,24 +18,30 @@ module.exports = (sequelize, DataTypes) => {
       return `${this.firstName} ${this.lastName}`;
     }
   }
-  UserProfile.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    dateOfBirth: DataTypes.DATE,
-    gender: DataTypes.STRING,
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users',
-        key: 'id'
+  UserProfile.init(
+    {
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      dateOfBirth: DataTypes.DATE,
+      gender: DataTypes.STRING,
+      address: DataTypes.TEXT,
+      city: DataTypes.STRING,
+      country: DataTypes.STRING,
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+    },
+    {
+      sequelize,
+      modelName: "UserProfile",
     }
-  }, {
-    sequelize,
-    modelName: 'UserProfile',
-  });
+  );
   return UserProfile;
 };
