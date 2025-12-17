@@ -1,0 +1,47 @@
+<%- include('./partials/header') %>
+
+<h1>Register</h1>
+
+<form action="/register" method="post">
+  <div>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" />
+  </div>
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" />
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" />
+  </div>
+  <div>
+    <label for="role">Role</label>
+    <select id="role" name="role">
+      <option value="patient">Patient</option>
+      <option value="doctor">Doctor</option>
+    </select>
+  </div>
+  <div>
+    <label for="firstName">First Name</label>
+    <input type="text" id="firstName" name="firstName" />
+  </div>
+  <div>
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" name="lastName" />
+  </div>
+  <div>
+    <label for="dateOfBirth">Date of Birth</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth" />
+  </div>
+  <div>
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
+  <button type="submit">Register</button>
+</form>
+
+<%- include('./partials/footer') %>
