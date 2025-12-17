@@ -5,13 +5,11 @@
   <title>Home | Health Tech</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Bootstrap -->
   <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
   />
 
-  <!-- Google Font -->
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
     rel="stylesheet"
@@ -86,7 +84,6 @@
 
 <div class="container hero">
 
-  <!-- HERO -->
   <div class="mb-5">
     <h1>
       Welcome, <%= user ? user.username : 'Guest' %> 👋
@@ -98,7 +95,6 @@
 
   <% if (user) { %>
 
-  <!-- STAT CARDS -->
   <div class="row mb-5">
     <div class="col-md-4">
       <div class="stat-card">
@@ -126,7 +122,6 @@
     </div>
   </div>
 
-  <!-- DOCTOR VIEW -->
   <% if (user.role === 'doctor') { %>
     <div class="table-card">
       <h4 class="mb-4">Incoming Appointments</h4>
@@ -179,7 +174,6 @@
       <% } %>
     </div>
 
-  <!-- PATIENT VIEW -->
   <% } else { %>
     <div class="table-card">
       <div class="d-flex justify-content-between align-items-center mb-4">

@@ -18,12 +18,12 @@ class InvoiceController {
       const appointment = await Appointment.findByPk(id, {
         include: [
           {
-            model: User, // Patient
+            model: User,
             include: UserProfile,
           },
           {
             model: Doctor,
-            include: User, // Doctor's User data
+            include: User,
           },
           Disease,
         ],
@@ -33,7 +33,6 @@ class InvoiceController {
         return res.status(404).send("Appointment not found");
       }
 
-      // Security check: only the patient can download their invoice
       if (appointment.userId !== userId) {
         return res.status(403).send("Unauthorized");
       }
@@ -95,8 +94,6 @@ class InvoiceController {
 
       const result = await easyinvoice.createInvoice(data);
       const pdfBase64 = result.pdf;
-
-      // Serve the PDF
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",

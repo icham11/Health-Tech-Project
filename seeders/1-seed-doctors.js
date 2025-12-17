@@ -18,20 +18,18 @@ module.exports = {
       { username: 'doctor_neuro_2', email: 'neuro2@mail.com', specialization: 'Neurologist' }
     ];
 
-    // USERS
     await queryInterface.bulkInsert(
       'Users',
       doctors.map(d => ({
         username: d.username,
         email: d.email,
-        password: hashedPassword, // ✅ HASHED
+        password: hashedPassword,
         role: 'doctor',
         createdAt: new Date(),
         updatedAt: new Date()
       }))
     );
 
-    // Ambil user
     const users = await queryInterface.sequelize.query(
       `SELECT id, email FROM "Users" WHERE email IN (:emails)`,
       {
@@ -40,7 +38,6 @@ module.exports = {
       }
     );
 
-    // DOCTORS
     await queryInterface.bulkInsert(
       'Doctors',
       users.map(u => {

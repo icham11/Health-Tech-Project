@@ -3,12 +3,10 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    // Ambil semua doctor
     const doctors = await queryInterface.sequelize.query(
       `SELECT id, specialization FROM "Doctors";`
     );
 
-    // Ambil semua disease
     const diseases = await queryInterface.sequelize.query(
       `SELECT id, name FROM "Diseases";`
     );
@@ -18,7 +16,6 @@ module.exports = {
 
     const doctorDiseases = [];
 
-    // Mapping berdasarkan spesialis
     const mapping = {
       General: ['Flu', 'Fever', 'Bronchitis', 'Anemia'],
       Surgeon: ['Appendicitis'],

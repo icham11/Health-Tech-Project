@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 class DiseaseController {
   static async listDiseases(req, res) {
     try {
-      const { search, error } = req.query; // Added error handling
+      const { search, error } = req.query;
       const options = {
         where: {},
         order: [["name", "ASC"]],
@@ -24,7 +24,7 @@ class DiseaseController {
         user = await User.findByPk(userId);
       }
 
-      res.render("diseases", { diseases, user, role, error }); // Passed role and error
+      res.render("diseases", { diseases, user, role, error });
     } catch (error) {
       console.log(error);
       res.send(error);
@@ -86,7 +86,6 @@ class DiseaseController {
         const errors = error.errors.map((el) => el.message);
         const { userId } = req.session;
         const user = await User.findByPk(userId);
-        // Re-construct partial object to refill form
         res.render("disease-form", {
           disease: { id, name, description, level },
           error: errors,

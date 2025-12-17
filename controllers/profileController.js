@@ -9,7 +9,6 @@ class ProfileController {
         include: UserProfile,
       });
 
-      // 👇 PASTIKAN SELALU ADA (null kalau belum pernah diisi)
       const profile = user ? user.UserProfile : null;
 
       res.render("edit-profile", {

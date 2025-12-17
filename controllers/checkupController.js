@@ -27,8 +27,6 @@ class CheckupController {
       if (!Array.isArray(symptoms)) {
         symptoms = [symptoms];
       }
-
-      // Safety: Filter out non-numeric values and cast to integers
       symptoms = symptoms.map((s) => parseInt(s)).filter((s) => !isNaN(s));
 
       if (!symptoms || symptoms.length === 0) {
@@ -57,7 +55,6 @@ class CheckupController {
 
       const user = await User.findByPk(userId);
 
-      // Render the doctor selection page instad of auto-booking
       res.render("check-up-doctors", { doctors, symptoms, user });
     } catch (error) {
       console.log(error);
@@ -70,10 +67,8 @@ class CheckupController {
       const { doctorId, symptoms } = req.body;
       const { userId } = req.session;
 
-      // Parse symptoms back to array of integers
       const symptomsArray = symptoms.split(",").map(Number);
 
-      // Find the doctor and intersect symptoms to find the reason
       const doctor = await Doctor.findByPk(doctorId, {
         include: {
           model: Disease,
@@ -89,7 +84,6 @@ class CheckupController {
         return res.redirect("/check-up");
       }
 
-      // Pick the first matching disease as the reason
       const diseaseId = doctor.Diseases[0].id;
 
       const appointmentDate = new Date();

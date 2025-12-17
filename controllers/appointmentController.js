@@ -60,7 +60,7 @@ class AppointmentController {
       const appointment = await Appointment.findByPk(id, {
         include: {
           model: Doctor,
-          where: { userId }, // Ensure the logged-in doctor owns this appointment
+          where: { userId },
         },
       });
 
@@ -72,7 +72,7 @@ class AppointmentController {
         await appointment.update({ status: "completed" });
       }
 
-      res.redirect("/"); // Redirect to dashboard
+      res.redirect("/");
     } catch (error) {
       console.log(error);
       res.send(error);
