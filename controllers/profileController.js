@@ -4,10 +4,18 @@ class ProfileController {
   static async editForm(req, res) {
     try {
       const { userId } = req.session;
+
       const user = await User.findByPk(userId, {
         include: UserProfile,
       });
-      res.render("edit-profile", { user, error: null });
+
+      // 👇 PASTIKAN SELALU ADA (null kalau belum pernah diisi)
+      const profile = user ? user.UserProfile : null;
+
+      res.render("edit-profile", {
+        user,
+        profile,
+      });
     } catch (error) {
       console.log(error);
       res.send(error);

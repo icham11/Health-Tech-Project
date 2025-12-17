@@ -1,82 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home | Health Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(
+          rgba(255,255,255,0.92),
+          rgba(255,255,255,0.92)
+        ),
+        url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3");
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+    }
+
+    .hero {
+      padding: 80px 0 40px;
+    }
+
+    .hero h1 {
+      font-weight: 600;
+    }
+
+    .stat-card {
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      padding: 25px;
+      background: white;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 600;
+      color: #0d6efd;
+    }
+
+    .table-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      padding: 25px;
+    }
+
+    table th {
+      border-top: none !important;
+    }
+
+    .badge-status {
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .completed {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .pending {
+      background: #fff3cd;
+      color: #664d03;
+    }
+  </style>
+</head>
+
+<body>
+
 <%- include('./partials/header') %>
 
-<div class="container mt-5">
-  <h1>Welcome, <%= user ? user.username : 'Guest' %>!</h1>
+<div class="container hero">
 
-  <% if (user) { %> <% if (user.role === 'doctor') { %>
-  <h2>Incoming Appointments</h2>
-  <% if (appointments.length > 0) { %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Patient Name</th>
-        <th>Gender</th>
-        <th>Disease</th>
-        <th>Appointment Date</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% appointments.forEach(appointment => { %>
-      <tr>
-        <td><%= appointment.User ? appointment.User.username : 'Unknown' %></td>
-        <td>
-          <%= appointment.User && appointment.User.UserProfile ?
-          appointment.User.UserProfile.gender : '-' %>
-        </td>
-        <td><%= appointment.Disease.name %></td>
-        <td><%= appointment.appointmentDate.toLocaleDateString() %></td>
-        <td><%= appointment.status %></td>
-        <td>
-          <% if (appointment.status === 'pending') { %>
-          <a
-            href="/appointments/<%= appointment.id %>/complete"
-            class="btn btn-sm btn-success"
-            onclick="return confirm('Mark as completed?')"
-            >Complete</a
-          >
-          <% } %>
-        </td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <% } else { %>
-  <p>No incoming appointments yet.</p>
-  <% } %> <% } else { %>
-  <a href="/check-up" class="btn btn-primary mb-3">New Check Up</a>
+  <!-- HERO -->
+  <div class="mb-5">
+    <h1>
+      Welcome, <%= user ? user.username : 'Guest' %> 👋
+    </h1>
+    <p class="text-muted mt-2">
+      Manage your appointments and health records in one place.
+    </p>
+  </div>
 
-  <h2>Your Appointments</h2>
-  <% if (appointments.length > 0) { %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Doctor</th>
-        <th>Disease</th>
-        <th>Appointment Date</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% appointments.forEach(appointment => { %>
-      <tr>
-        <td>
-          Dr. <%= appointment.Doctor && appointment.Doctor.User ?
-          appointment.Doctor.User.username : 'Unknown' %>
-        </td>
-        <td><%= appointment.Disease.name %></td>
-        <td><%= appointment.appointmentDate.toLocaleDateString() %></td>
-        <td><%= appointment.status %></td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
+  <% if (user) { %>
+
+  <!-- STAT CARDS -->
+  <div class="row mb-5">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <p class="text-muted mb-1">Total Appointments</p>
+        <div class="stat-number"><%= appointments.length %></div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <p class="text-muted mb-1">Completed</p>
+        <div class="stat-number">
+          <%= appointments.filter(a => a.status === 'completed').length %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stat-card">
+        <p class="text-muted mb-1">Pending</p>
+        <div class="stat-number">
+          <%= appointments.filter(a => a.status === 'pending').length %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCTOR VIEW -->
+  <% if (user.role === 'doctor') { %>
+    <div class="table-card">
+      <h4 class="mb-4">Incoming Appointments</h4>
+
+      <% if (appointments.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Gender</th>
+              <th>Disease</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% appointments.forEach(ap => { %>
+            <tr>
+              <td><%= ap.User?.username || '-' %></td>
+              <td><%= ap.User?.UserProfile?.gender || '-' %></td>
+              <td><%= ap.Disease?.name %></td>
+              <td><%= ap.appointmentDate.toLocaleDateString() %></td>
+              <td>
+                <span class="badge-status <%= ap.status === 'completed' ? 'completed' : 'pending' %>">
+                  <%= ap.status %>
+                </span>
+              </td>
+              <td>
+                <% if (ap.status === 'pending') { %>
+                  <a
+                    href="/appointments/<%= ap.id %>/complete"
+                    class="btn btn-sm btn-success"
+                    onclick="return confirm('Mark appointment as completed?')"
+                  >
+                    Complete
+                  </a>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } else { %>
+        <p class="text-muted">No incoming appointments.</p>
+      <% } %>
+    </div>
+
+  <!-- PATIENT VIEW -->
   <% } else { %>
-  <p>You have no appointments. Book a <a href="/check-up">Check-up</a> now!</p>
-  <% } %> <% } %> <% } else { %>
-  <p>Please <a href="/login">login</a> to manage your appointments.</p>
+    <div class="table-card">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Your Appointments</h4>
+        <a href="/check-up" class="btn btn-primary">New Check Up</a>
+      </div>
+
+      <% if (appointments.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Doctor</th>
+              <th>Disease</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% appointments.forEach(ap => { %>
+            <tr>
+              <td>Dr. <%= ap.Doctor?.User?.username || '-' %></td>
+              <td><%= ap.Disease?.name %></td>
+              <td><%= ap.appointmentDate.toLocaleDateString() %></td>
+              <td>
+                <span class="badge-status <%= ap.status === 'completed' ? 'completed' : 'pending' %>">
+                  <%= ap.status %>
+                </span>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } else { %>
+        <p class="text-muted">
+          You have no appointments yet. Book a check-up now!
+        </p>
+      <% } %>
+    </div>
   <% } %>
+
+  <% } else { %>
+    <div class="text-center mt-5">
+      <p>Please <a href="/login">login</a> to manage your appointments.</p>
+    </div>
+  <% } %>
+
 </div>
 
 <%- include('./partials/footer') %>
+
+</body>
+</html>

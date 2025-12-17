@@ -101,7 +101,10 @@ class Controller {
         lastName,
         dateOfBirth,
         gender,
-        specialization,
+        address,
+        city,
+        country,
+        specialization
       } = req.body;
       const user = await User.create({ username, email, password, role });
       await UserProfile.create({
@@ -109,6 +112,9 @@ class Controller {
         lastName,
         dateOfBirth,
         gender,
+        address,
+        city,
+        country,
         userId: user.id,
       });
 

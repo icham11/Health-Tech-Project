@@ -1,0 +1,22 @@
+[
+  { "name": "Flu", "description": "Common viral infection affecting respiratory system", "level": 1 },
+  { "name": "Common Cold", "description": "Mild viral respiratory infection", "level": 1 },
+  { "name": "COVID-19", "description": "Infectious disease caused by coronavirus", "level": 3 },
+  { "name": "Diabetes Type 1", "description": "Chronic condition where pancreas produces little insulin", "level": 4 },
+  { "name": "Diabetes Type 2", "description": "Chronic condition affecting glucose metabolism", "level": 3 },
+  { "name": "Hypertension", "description": "High blood pressure condition", "level": 2 },
+  { "name": "Heart Disease", "description": "Conditions affecting heart function", "level": 4 },
+  { "name": "Asthma", "description": "Chronic respiratory disease causing breathing difficulty", "level": 2 },
+  { "name": "Pneumonia", "description": "Infection that inflames air sacs in lungs", "level": 3 },
+  { "name": "Tuberculosis", "description": "Serious infectious bacterial lung disease", "level": 4 },
+  { "name": "Migraine", "description": "Recurring headache with severe pain", "level": 2 },
+  { "name": "Anemia", "description": "Condition where blood lacks healthy red blood cells", "level": 2 },
+  { "name": "Stroke", "description": "Interrupted blood supply to brain", "level": 5 },
+  { "name": "Kidney Stone", "description": "Hard mineral deposits formed in kidneys", "level": 3 },
+  { "name": "Gastritis", "description": "Inflammation of stomach lining", "level": 2 },
+  { "name": "Hepatitis", "description": "Inflammation of liver often caused by virus", "level": 4 },
+  { "name": "Allergy", "description": "Immune system reaction to foreign substances", "level": 1 },
+  { "name": "Depression", "description": "Mental health disorder causing persistent sadness", "level": 3 },
+  { "name": "Anxiety Disorder", "description": "Mental health disorder characterized by excessive worry", "level": 2 },
+  { "name": "Cancer", "description": "Uncontrolled growth of abnormal cells", "level": 5 }
+]

@@ -1,67 +1,143 @@
 <%- include('./partials/header') %>
 
-<div class="container mt-5">
-  <h1>Diseases</h1>
-  <div class="row mb-3">
-    <div class="col-md-6">
-      <form action="/diseases" method="GET" class="form-inline">
+<style>
+  body {
+    background: linear-gradient(
+        rgba(255,255,255,0.92),
+        rgba(255,255,255,0.92)
+      ),
+      url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+  }
+
+  .disease-container {
+    max-width: 1100px;
+    margin: 60px auto;
+  }
+
+  .disease-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .disease-title {
+    font-weight: 700;
+  }
+
+  .search-box {
+    display: flex;
+    gap: 10px;
+  }
+
+  .table-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  table {
+    margin: 0;
+  }
+
+  thead {
+    background: #f8f9fa;
+  }
+
+  th {
+    font-weight: 600;
+  }
+
+  tbody tr:hover {
+    background: #f1f7ff;
+  }
+
+  .badge-level {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .level-1 { background: #28a745; }
+  .level-2 { background: #17a2b8; }
+  .level-3 { background: #ffc107; color: #333; }
+  .level-4 { background: #fd7e14; }
+  .level-5 { background: #dc3545; }
+
+  .btn-action {
+    padding: 5px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+</style>
+
+<div class="disease-container">
+  <div class="disease-header">
+    <h2 class="disease-title">🦠 Diseases</h2>
+
+    <div class="d-flex gap-2">
+      <form class="search-box" action="/diseases" method="get">
         <input
-          class="form-control mr-sm-2"
-          type="search"
-          placeholder="Search diseases..."
-          aria-label="Search"
+          type="text"
           name="search"
+          class="form-control"
+          placeholder="Search diseases..."
         />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          Search
-        </button>
+        <button class="btn btn-outline-success">Search</button>
       </form>
+
+      <a href="/diseases/add" class="btn btn-primary">
+        + Add New Disease
+      </a>
     </div>
-    <% if (role === 'doctor') { %>
-    <div class="col-md-6 text-right">
-      <a href="/diseases/add" class="btn btn-primary">Add New Disease</a>
-    </div>
-    <% } %>
   </div>
-  <% if (typeof error !== 'undefined' && error) { %>
-  <div class="alert alert-danger"><%= error %></div>
-  <% } %>
-  <table class="table table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Level</th>
-        <% if (role === 'doctor') { %>
-        <th>Actions</th>
-        <% } %>
-      </tr>
-    </thead>
-    <tbody>
-      <% diseases.forEach(disease => { %>
-      <tr>
-        <td><%= disease.name %></td>
-        <td><%= disease.description %></td>
-        <td><%= disease.level %></td>
-        <% if (role === 'doctor') { %>
-        <td>
-          <a
-            href="/diseases/<%= disease.id %>/edit"
-            class="btn btn-sm btn-warning"
-            >Edit</a
-          >
-          <a
-            href="/diseases/<%= disease.id %>/delete"
-            class="btn btn-sm btn-danger"
-            onclick="return confirm('Are you sure?')"
-            >Delete</a
-          >
-        </td>
-        <% } %>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
+
+  <div class="table-card">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Level</th>
+          <th style="width: 160px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% diseases.forEach(disease => { %>
+          <tr>
+            <td><strong><%= disease.name %></strong></td>
+            <td><%= disease.description %></td>
+            <td>
+              <span class="badge-level level-<%= disease.level %>">
+                Level <%= disease.level %>
+              </span>
+            </td>
+            <td>
+              <a
+                href="/diseases/<%= disease.id %>/edit"
+                class="btn btn-warning btn-action"
+              >
+                Edit
+              </a>
+              <a
+                href="/diseases/<%= disease.id %>/delete"
+                class="btn btn-danger btn-action"
+                onclick="return confirm('Are you sure?')"
+              >
+                Delete
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <%- include('./partials/footer') %>

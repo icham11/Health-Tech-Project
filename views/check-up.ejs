@@ -1,49 +1,135 @@
-<%- include('./partials/header') %>
+<%- include('./partials/header', { user }) %>
 
-<div class="container mt-5">
-  <h1>Check Up</h1>
-  <form action="/check-up" method="POST">
-    <div class="row">
-      <% diseases.forEach(disease => { %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  name="symptoms"
-                  value="<%= disease.id %>"
-                  id="disease<%= disease.id %>"
-                />
-                <label
-                  class="custom-control-label"
-                  for="disease<%= disease.id %>"
-                  ><%= disease.name %></label
-                >
-              </div>
-            </h5>
-            <p class="card-text text-muted">
-              <small><%= disease.description %></small>
-            </p>
-          </div>
-          <div class="card-footer bg-transparent border-top-0">
-            <span class="badge badge-info">Level <%= disease.level %></span>
-          </div>
-        </div>
-      </div>
-      <% }); %>
+<style>
+  .checkup-container {
+    min-height: 100vh;
+    padding: 60px 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
+      url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3");
+    background-size: cover;
+    background-position: center;
+  }
+
+  .disease-card {
+    transition: all 0.2s ease;
+  }
+
+  .disease-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+  }
+
+  .level-1 { background: #28a745; }
+  .level-2 { background: #17a2b8; }
+  .level-3 { background: #ffc107; color: #000; }
+  .level-4 { background: #fd7e14; }
+  .level-5 { background: #dc3545; }
+
+  .level-badge {
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+  }
+</style>
+
+<div class="checkup-container">
+  <div class="container">
+
+    <!-- TITLE -->
+    <div class="mb-4">
+      <h2 class="font-weight-bold">
+        🩺 Check Up
+      </h2>
+      <p class="text-muted">
+        Select your symptoms to find the most suitable doctor
+      </p>
     </div>
 
-    <div class="row mt-3">
-      <div class="col-12 text-center">
-        <button type="submit" class="btn btn-primary btn-lg px-5">
+    <!-- SEARCH -->
+    <div class="mb-4" style="max-width: 400px;">
+      <input
+        type="text"
+        id="searchDisease"
+        class="form-control"
+        placeholder="🔍 Search disease..."
+      />
+    </div>
+
+    <!-- FORM -->
+    <form action="/check-up" method="POST">
+
+      <div class="row">
+
+        <% diseases.forEach(disease => { %>
+          <div
+            class="col-md-4 disease-card mb-4"
+            data-name="<%= disease.name.toLowerCase() %>"
+            data-desc="<%= disease.description.toLowerCase() %>"
+          >
+            <div class="card h-100">
+              <div class="card-body">
+
+                <div class="d-flex align-items-start">
+                  <input
+                    type="checkbox"
+                    name="diseaseIds"
+                    value="<%= disease.id %>"
+                    class="mr-2 mt-1"
+                  />
+                  <div>
+                    <h5 class="mb-1"><%= disease.name %></h5>
+                    <p class="text-muted mb-2">
+                      <%= disease.description %>
+                    </p>
+                  </div>
+                </div>
+
+                <span class="level-badge level-<%= disease.level %>">
+                  Level <%= disease.level %>
+                </span>
+
+              </div>
+            </div>
+          </div>
+        <% }) %>
+
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg px-5">
           Submit Symptoms for Analysis
         </button>
       </div>
-    </div>
-  </form>
+
+    </form>
+
+  </div>
 </div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+  const searchInput = document.getElementById("searchDisease");
+  const cards = document.querySelectorAll(".disease-card");
+
+  searchInput.addEventListener("keyup", function () {
+    const keyword = this.value.toLowerCase();
+
+    cards.forEach(card => {
+      const name = card.dataset.name;
+      const desc = card.dataset.desc;
+
+      if (name.includes(keyword) || desc.includes(keyword)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+</script>
 
 <%- include('./partials/footer') %>

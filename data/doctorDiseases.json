@@ -1,0 +1,26 @@
+[
+  { "doctorId": 1, "diseaseId": 1 },
+  { "doctorId": 1, "diseaseId": 2 },
+  { "doctorId": 1, "diseaseId": 3 },
+  { "doctorId": 1, "diseaseId": 6 },
+
+  { "doctorId": 2, "diseaseId": 4 },
+  { "doctorId": 2, "diseaseId": 5 },
+  { "doctorId": 2, "diseaseId": 16 },
+  { "doctorId": 2, "diseaseId": 20 },
+
+  { "doctorId": 3, "diseaseId": 7 },
+  { "doctorId": 3, "diseaseId": 13 },
+  { "doctorId": 3, "diseaseId": 10 },
+  { "doctorId": 3, "diseaseId": 9 },
+
+  { "doctorId": 4, "diseaseId": 8 },
+  { "doctorId": 4, "diseaseId": 11 },
+  { "doctorId": 4, "diseaseId": 12 },
+  { "doctorId": 4, "diseaseId": 15 },
+
+  { "doctorId": 5, "diseaseId": 17 },
+  { "doctorId": 5, "diseaseId": 18 },
+  { "doctorId": 5, "diseaseId": 19 },
+  { "doctorId": 5, "diseaseId": 14 }
+]
