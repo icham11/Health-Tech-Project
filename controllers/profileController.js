@@ -46,11 +46,8 @@ class ProfileController {
       if (error.name === "SequelizeValidationError") {
         const errors = error.errors.map((el) => el.message);
         const { userId } = req.session;
-        // We need to re-fetch the user to maintain structure,
-        // but overwrite the profile part with submitted values for display
         const user = await User.findByPk(userId);
 
-        // Construct a temporary profile object with submitted values
         const profile = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,

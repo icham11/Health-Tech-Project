@@ -127,9 +127,6 @@ class Controller {
         }
         res.redirect("/login?success=Registration successful. Please login.");
       } catch (err) {
-        // If UserProfile creation fails, we should ideally rollback user creation or handle it.
-        // For now, let's catch the error and re-render.
-        // Deleting the created user to maintain consistency (simple rollback)
         await User.destroy({ where: { id: user.id } });
         throw err;
       }
@@ -165,7 +162,6 @@ class Controller {
       const { email, password } = req.body;
       const errors = [];
 
-      // VALIDATION KOSONG
       if (!email || !email.trim()) {
         errors.push("Email is required");
       }

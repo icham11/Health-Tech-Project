@@ -55,7 +55,6 @@ router.post("/profile/edit", profileController.updateProfile);
 
 router.get("/diseases", diseaseController.listDiseases);
 
-// Middleware to check if user is doctor (simple check)
 const isDoctor = (req, res, next) => {
   if (req.session.role === "doctor") {
     next();
