@@ -41,7 +41,7 @@ class AppointmentController {
         await appointment.update({ status: "cancelled" });
       }
 
-      res.redirect("/appointments");
+      res.redirect("/appointments?success=Appointment cancelled successfully.");
     } catch (error) {
       console.log(error);
       res.send(error);
@@ -72,7 +72,7 @@ class AppointmentController {
         await appointment.update({ status: "completed" });
       }
 
-      res.redirect("/");
+      res.redirect("/?success=Appointment marked as completed.");
     } catch (error) {
       console.log(error);
       res.send(error);

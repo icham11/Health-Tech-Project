@@ -22,11 +22,66 @@ module.exports = (sequelize, DataTypes) => {
     {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
-      dateOfBirth: DataTypes.DATE,
-      gender: DataTypes.STRING,
-      address: DataTypes.TEXT,
-      city: DataTypes.STRING,
-      country: DataTypes.STRING,
+      dateOfBirth: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Date of Birth is required",
+          },
+          notEmpty: {
+            msg: "Date of Birth is required",
+          },
+        },
+      },
+      gender: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Gender is required",
+          },
+          notEmpty: {
+            msg: "Gender is required",
+          },
+        },
+      },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Address is required",
+          },
+          notEmpty: {
+            msg: "Address is required",
+          },
+        },
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "City is required",
+          },
+          notEmpty: {
+            msg: "City is required",
+          },
+        },
+      },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "Country is required",
+          },
+          notEmpty: {
+            msg: "Country is required",
+          },
+        },
+      },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,

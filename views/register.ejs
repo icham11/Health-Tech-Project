@@ -81,44 +81,53 @@
     </div>
 
     <div class="col-md-7 register-right">
-      <h3 class="mb-4 text-center">Create Account</h3>
+      <% if (errors) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(err => { %>
+          <li><%= err %></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
 
       <form action="/register" method="POST">
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Username</label>
-            <input type="text" name="username" class="form-control" required />
+            <input type="text" name="username" class="form-control" value="<%= values.username || '' %>"  />
           </div>
           <div class="form-group col-md-6">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" required />
+            <input type="email" name="email" class="form-control" value="<%= values.email || '' %>"  />
           </div>
         </div>
 
         <div class="form-group">
           <label>Password</label>
-          <input type="password" name="password" class="form-control" required />
+          <input type="password" name="password" class="form-control"  />
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Role</label>
             <select name="role" id="role" class="form-control">
-              <option value="patient">Patient</option>
-              <option value="doctor">Doctor</option>
+              <option value="" disabled <%= !values.role ? 'selected' : '' %>>-- Select Role --</option>
+              <option value="patient" <%= values.role === 'patient' ? 'selected' : '' %>>Patient</option>
+              <option value="doctor" <%= values.role === 'doctor' ? 'selected' : '' %>>Doctor</option>
             </select>
           </div>
 
-          <div class="form-group col-md-6" id="specialization-container" style="display: none;">
+          <div class="form-group col-md-6" id="specialization-container" <%- values.role === 'doctor' ? '' : 'style="display: none;"' %>>
             <label>Specialization</label>
             <select name="specialization" class="form-control">
-              <option value="General">General</option>
-              <option value="Surgeon">Surgeon</option>
-              <option value="Cardiologist">Cardiologist</option>
-              <option value="Pediatrician">Pediatrician</option>
-              <option value="Dermatologist">Dermatologist</option>
-              <option value="Neurologist">Neurologist</option>
+              <option value="General" <%= values.specialization === 'General' ? 'selected' : '' %>>General</option>
+              <option value="Surgeon" <%= values.specialization === 'Surgeon' ? 'selected' : '' %>>Surgeon</option>
+              <option value="Cardiologist" <%= values.specialization === 'Cardiologist' ? 'selected' : '' %>>Cardiologist</option>
+              <option value="Pediatrician" <%= values.specialization === 'Pediatrician' ? 'selected' : '' %>>Pediatrician</option>
+              <option value="Dermatologist" <%= values.specialization === 'Dermatologist' ? 'selected' : '' %>>Dermatologist</option>
+              <option value="Neurologist" <%= values.specialization === 'Neurologist' ? 'selected' : '' %>>Neurologist</option>
             </select>
           </div>
         </div>
@@ -126,41 +135,41 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>First Name</label>
-            <input type="text" name="firstName" class="form-control" />
+            <input type="text" name="firstName" class="form-control" value="<%= values.firstName || '' %>" />
           </div>
           <div class="form-group col-md-6">
             <label>Last Name</label>
-            <input type="text" name="lastName" class="form-control" />
+            <input type="text" name="lastName" class="form-control" value="<%= values.lastName || '' %>" />
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Date of Birth</label>
-            <input type="date" name="dateOfBirth" class="form-control" />
+            <input type="date" name="dateOfBirth" class="form-control" value="<%= values.dateOfBirth || '' %>" />
           </div>
           <div class="form-group col-md-6">
             <label>Gender</label>
             <select name="gender" class="form-control">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="Male" <%= values.gender === 'Male' ? 'selected' : '' %>>Male</option>
+              <option value="Female" <%= values.gender === 'Female' ? 'selected' : '' %>>Female</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
           <label>Address</label>
-          <textarea name="address" class="form-control" rows="2"></textarea>
+          <textarea name="address" class="form-control" rows="2"><%= values.address || '' %></textarea>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>City</label>
-            <input type="text" name="city" class="form-control" />
+            <input type="text" name="city" class="form-control" value="<%= values.city || '' %>" />
           </div>
           <div class="form-group col-md-6">
             <label>Country</label>
-            <input type="text" name="country" class="form-control" />
+            <input type="text" name="country" class="form-control" value="<%= values.country || '' %>" />
           </div>
         </div>
 

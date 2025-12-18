@@ -83,7 +83,7 @@ class Controller {
 
   static async getRegisterForm(req, res) {
     try {
-      res.render("register", { user: null });
+      res.render("register", { user: null, errors: null, values: {} });
     } catch (error) {
       console.log(error);
       res.status(500).send({ message: "Internal Server Error" });
@@ -91,49 +91,60 @@ class Controller {
   }
 
   static async postRegister(req, res) {
+    const {
+      username,
+      email,
+      password,
+      role,
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      address,
+      city,
+      country,
+      specialization,
+    } = req.body;
     try {
-      const {
-        username,
-        email,
-        password,
-        role,
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        address,
-        city,
-        country,
-        specialization
-      } = req.body;
       const user = await User.create({ username, email, password, role });
-      await UserProfile.create({
-        firstName,
-        lastName,
-        dateOfBirth,
-        gender,
-        address,
-        city,
-        country,
-        userId: user.id,
-      });
-
-      if (role === "doctor") {
-        await Doctor.create({
+      try {
+        await UserProfile.create({
+          firstName,
+          lastName,
+          dateOfBirth,
+          gender,
+          address,
+          city,
+          country,
           userId: user.id,
-          specialization: specialization || "General",
         });
-      }
 
-      res.redirect("/login");
+        if (role === "doctor") {
+          await Doctor.create({
+            userId: user.id,
+            specialization: specialization || "General",
+          });
+        }
+        res.redirect("/login?success=Registration successful. Please login.");
+      } catch (err) {
+        // If UserProfile creation fails, we should ideally rollback user creation or handle it.
+        // For now, let's catch the error and re-render.
+        // Deleting the created user to maintain consistency (simple rollback)
+        await User.destroy({ where: { id: user.id } });
+        throw err;
+      }
     } catch (error) {
       console.log(error);
-      if (error.name === "SequelizeValidationError") {
+      if (
+        error.name === "SequelizeValidationError" ||
+        error.name === "SequelizeUniqueConstraintError"
+      ) {
         const errors = error.errors.map((el) => el.message);
-        res.status(400).send(errors);
-      } else if (error.name === "SequelizeUniqueConstraintError") {
-        const errors = error.errors.map((el) => el.message);
-        res.status(400).send(errors);
+        res.render("register", {
+          user: null,
+          errors,
+          values: req.body,
+        });
       } else {
         res.status(500).send({ message: "Internal Server Error" });
       }
@@ -180,7 +191,7 @@ class Controller {
 
       req.session.userId = user.id;
       req.session.role = user.role;
-      res.redirect("/");
+      res.redirect("/?success=Welcome back!");
     } catch (error) {
       res.send(error);
     }
@@ -191,7 +202,7 @@ class Controller {
       if (err) {
         res.status(500).send({ message: "Internal Server Error" });
       } else {
-        res.redirect("/");
+        res.redirect("/login?success=You have been logged out.");
       }
     });
   }

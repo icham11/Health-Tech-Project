@@ -3,6 +3,12 @@ const Controller = require("../controllers/Controller");
 const checkupController = require("../controllers/checkupController");
 const diseaseController = require("../controllers/diseaseController");
 
+router.use((req, res, next) => {
+  res.locals.success = req.query.success || null;
+  res.locals.error = req.query.error || null;
+  next();
+});
+
 router.get("/", Controller.showHome);
 
 router.get("/register", Controller.getRegisterForm);

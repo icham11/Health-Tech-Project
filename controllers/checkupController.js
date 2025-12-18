@@ -97,7 +97,9 @@ class CheckupController {
         status: "pending",
       });
 
-      res.redirect("/appointments");
+      res.redirect(
+        "/appointments?success=Appointment booked successfully! Please wait for confirmation."
+      );
     } catch (error) {
       console.log(error);
       res.send(error);

@@ -42,10 +42,10 @@ class DiseaseController {
   }
 
   static async createDisease(req, res) {
+    const { name, description, level } = req.body;
     try {
-      const { name, description, level } = req.body;
       await Disease.create({ name, description, level });
-      res.redirect("/diseases");
+      res.redirect("/diseases?success=Disease added successfully");
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
         const errors = error.errors.map((el) => el.message);
@@ -57,7 +57,7 @@ class DiseaseController {
           user,
         });
       } else {
-        res.send(error);
+        res.status(500).send({ message: "Internal Server Error" });
       }
     }
   }
@@ -75,14 +75,13 @@ class DiseaseController {
   }
 
   static async updateDisease(req, res) {
+    const { id } = req.params;
+    const { name, description, level } = req.body;
     try {
-      const { id } = req.params;
-      const { name, description, level } = req.body;
       await Disease.update({ name, description, level }, { where: { id } });
-      res.redirect("/diseases");
+      res.redirect("/diseases?success=Disease updated successfully");
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
-        const { id } = req.params;
         const errors = error.errors.map((el) => el.message);
         const { userId } = req.session;
         const user = await User.findByPk(userId);
@@ -92,7 +91,7 @@ class DiseaseController {
           user,
         });
       } else {
-        res.send(error);
+        res.status(500).send({ message: "Internal Server Error" });
       }
     }
   }
@@ -101,7 +100,7 @@ class DiseaseController {
     try {
       const { id } = req.params;
       await Disease.destroy({ where: { id } });
-      res.redirect("/diseases");
+      res.redirect("/diseases?success=Disease deleted successfully");
     } catch (error) {
       res.redirect(`/diseases?error=${error.message}`);
     }

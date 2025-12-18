@@ -14,6 +14,7 @@ class ProfileController {
       res.render("edit-profile", {
         user,
         profile,
+        errors: null,
       });
     } catch (error) {
       console.log(error);
@@ -39,10 +40,37 @@ class ProfileController {
         { where: { userId } }
       );
 
-      res.redirect("/");
+      res.redirect("/?success=Profile updated successfully");
     } catch (error) {
       console.log(error);
-      res.send(error);
+      if (error.name === "SequelizeValidationError") {
+        const errors = error.errors.map((el) => el.message);
+        const { userId } = req.session;
+        // We need to re-fetch the user to maintain structure,
+        // but overwrite the profile part with submitted values for display
+        const user = await User.findByPk(userId);
+
+        // Construct a temporary profile object with submitted values
+        const profile = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          dateOfBirth: req.body.dateOfBirth
+            ? new Date(req.body.dateOfBirth)
+            : null,
+          gender: req.body.gender,
+          address: req.body.address,
+          city: req.body.city,
+          country: req.body.country,
+        };
+
+        res.render("edit-profile", {
+          user,
+          profile,
+          errors,
+        });
+      } else {
+        res.status(500).send({ message: "Internal Server Error" });
+      }
     }
   }
 }
