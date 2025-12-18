@@ -27,7 +27,7 @@
           <tr>
             <td><%= index + 1 %></td>
             <td>Dr. <%= appointment.Doctor.User.username %></td>
-            <td><%= appointment.Disease.name %></td>
+            <td><%= appointment.Disease ? appointment.Disease.name : '-' %></td>
             <td>
               <%= appointment.appointmentDate.toLocaleDateString('id-ID', {
               weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })

@@ -152,20 +152,37 @@ class Controller {
   static async postLogin(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await User.findOne({ where: { email } });
-      if (user) {
-        const isValidPassword = bcrypt.compareSync(password, user.password);
-        if (isValidPassword) {
-          req.session.userId = user.id;
-          req.session.role = user.role;
-          return res.redirect("/");
-        }
+      const errors = [];
+
+      // VALIDATION KOSONG
+      if (!email || !email.trim()) {
+        errors.push("Email is required");
       }
-      const error = "Invalid email or password";
-      res.status(401).render("login", { error, user: null });
+
+      if (!password || !password.trim()) {
+        errors.push("Password is required");
+      }
+
+      if (errors.length > 0) {
+        return res.render("login", { errors });
+      }
+
+      const user = await User.findOne({ where: { email } });
+
+      if (!user) {
+        return res.render("login", { errors: ["Email not found"] });
+      }
+
+      const isValid = bcrypt.compareSync(password, user.password);
+      if (!isValid) {
+        return res.render("login", { errors: ["Incorrect password"] });
+      }
+
+      req.session.userId = user.id;
+      req.session.role = user.role;
+      res.redirect("/");
     } catch (error) {
-      console.log(error);
-      res.status(500).send({ message: "Internal Server Error" });
+      res.send(error);
     }
   }
 

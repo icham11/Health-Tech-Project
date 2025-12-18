@@ -21,7 +21,7 @@ class CheckupController {
 
   static async postCheckup(req, res) {
     try {
-      let { symptoms } = req.body;
+      let { diseaseIds: symptoms } = req.body;
       const userId = req.session.userId;
 
       if (!Array.isArray(symptoms)) {
